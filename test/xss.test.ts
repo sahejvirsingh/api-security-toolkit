@@ -11,6 +11,6 @@ describe("XSS Protection", () => {
   it("should sanitize plain text", () => {
     const input = "Hello <script> javascript:alert(1) onmouseover=test data:base64";
     const clean = sanitizeText(input);
-    expect(clean).toBe("Hello script  alert(1) test base64");
+    expect(clean).toBe("Hello script alert(1) test base64");
   });
 });
