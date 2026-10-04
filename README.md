@@ -1,43 +1,19 @@
-# API Security Toolkit
+﻿# 🛡️ API Security Toolkit
 
-Framework-agnostic security helpers for Node.js / HTTP APIs. Includes rate limiting (memory and Redis), XSS sanitization, and safe file uploads.
+Framework-agnostic, edge-ready security middleware for Node.js / HTTP APIs. Defends against XSS, brute force attacks, and disguised malicious file uploads.
 
-## Installation
+## ✨ Features
 
-```bash
-npm install api-security-toolkit
-```
+- **Distributed Rate Limiting**: Sliding-window rate limiter powered by @upstash/ratelimit for Redis, alongside a zero-dependency in-memory fallback.
+- **XSS Protection**: Dual-layer sanitization (strict regex for plain text and sanitize-html for rich text).
+- **Magic Bytes File Validation**: Inspects the first 8 bytes (hex signature) of an ArrayBuffer to verify a file's true MIME type, preventing executable disguise attacks.
 
-## Features
+## 🚀 Quick Start
 
-- **Rate Limiting:** Sliding-window rate limiter powered by `@upstash/ratelimit` for Redis, or a lightweight fixed-window in-memory fallback.
-- **XSS Protection:** Wrapper around `sanitize-html` to safely render user content while removing malicious payloads.
-- **Secure File Uploads:** Validates file magic bytes (signatures) against declared MIME types to prevent disguise attacks (e.g., an EXE disguised as a PNG).
+`ash
+npm install
+npm test
+`
 
-## Quick Start
-
-```typescript
-import { MemoryStore, sanitizeHtml, validateFileUpload } from "api-security-toolkit";
-
-// 1. Rate Limiting
-const rateLimiter = new MemoryStore();
-const result = await rateLimiter.limit("user_123", 10, 60_000); // 10 req / minute
-if (!result.allowed) {
-  throw new Error("Rate limit exceeded");
-}
-
-// 2. XSS Sanitization
-const cleanHtml = sanitizeHtml(`<p>Safe</p><script>alert("hacked")</script>`);
-// Result: "<p>Safe</p>"
-
-// 3. File Upload Validation
-const buffer = await req.file.arrayBuffer(); // Get buffer from your framework
-const uploadResult = validateFileUpload(buffer, "avatar.png", "image/png");
-if (!uploadResult.valid) {
-  throw new Error(uploadResult.error);
-}
-```
-
-## License
+## 📄 License
 MIT
-
